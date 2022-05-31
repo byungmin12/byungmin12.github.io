@@ -1,0 +1,40 @@
+# 프로젝트를 처음 시작할 때
+
+step 1 - install
+
+```bash
+npx degit sveltejs/template projectName
+```
+
+step 2 - convert ts to js
+
+설치 파일 내부로 들어간다 그 후
+
+```bash
+node scripts/setupTypeScript.js
+```
+
+# 기존에 있는 컴포넌트
+
+step 1 - install @tsconfig/svelte typescript svelte-preprocess svelte-check
+
+```bash
+npm install --save-dev @tsconfig/svelte typescript svelte-preprocess svelte-check
+```
+
+step 2 - modify rollup.config.js
+
+```js
++ import autoPreprocess from 'svelte-preprocess';
++ import typescript from '@rollup/plugin-typescript';
+
+export default {
+  ...,
+  plugins: [
+    svelte({
++       preprocess: autoPreprocess()
+    }),
++   typescript({ sourceMap: !production })
+  ]
+}
+```

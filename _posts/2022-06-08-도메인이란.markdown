@@ -1,0 +1,57 @@
+# 도메인
+
+먼저 도메인이라는 것을 알기 전에 **IP주소**에 대해 집고 넘어가겠습니다.
+
+## IP ( Internet Protocol )
+
+**IP**는 Internet Protocol의 약어로 **송신 호스트와 수신 호스트가 패킷 교환 네트워크에서 정보를 주고받는 데 사용하는 정보 위주의 규약**이며, OSI 네트워크 계층에서 호스트의 주소지정과 패킷 분할 및 조립 기능을 담당한다.
+
+> OSI 계층
+
+### 특징 - 비신뢰성, 비연결성
+
+흐름에 관여하지 않기 때문에 정보가 제대로 갔는지 보장하지 않는다는 뜻
+보장하기 위해선 TCP같은 상위 계층에서 수행해야함
+
+### IP주소
+
+![](https://velog.velcdn.com/images/kbm940526/post/ee2cb70d-96e0-444f-a590-9341fd7a53cd/image.png)
+
+IP주소는 컴퓨터 네트워크에서 장치들이 서로를 인식하고 통신하기 위해 사용되는 특수한 번호이다. 쉽게 말해 인터넷상의 주소, 주민번호라고 생각하면된다.
+
+## 도메인
+
+그럼 도메인이란 뭐냐 ? 바로 IP는 사람이 기억하기 어렵기 때문에 이를 위해 I**P에 이름을 부여한 것이 도메인**이다.
+
+```bash
+//naver
+Server:		210.220.163.82
+Address:	210.220.163.82#53
+
+Non-authoritative answer:
+www.naver.com	canonical name = www.naver.com.nheos.com.
+Name:	www.naver.com.nheos.com
+Address: 223.130.195.200
+Name:	www.naver.com.nheos.com
+Address: 223.130.195.95
+```
+
+```bash
+//google
+Server:		210.220.163.82
+Address:	210.220.163.82#53
+
+Non-authoritative answer:
+Name:	www.google.com
+Address: 172.217.25.164
+```
+
+### 체계
+
+도메인은 Root DNS 밑으로 트리 구조를 이룬다.
+![](https://velog.velcdn.com/images/kbm940526/post/1a4478d3-2392-4b91-b0bf-e2360566b752/image.png)
+
+## 출처
+
+> [IP](https://ko.wikipedia.org/wiki/IP_%EC%A3%BC%EC%86%8C)
+> [domain](https://xn--3e0bx5euxnjje69i70af08bea817g.xn--3e0b707e/jsp/resources/domainInfo/domainInfo.jsp)

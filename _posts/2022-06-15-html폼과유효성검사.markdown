@@ -1,0 +1,87 @@
+# Form과 유효성 검사
+
+## HTML 폼
+
+HTML폼은 사용자와 웹사이트 또는 어플리케이션이 서로 상화 작용하는 기술 중 하나이다. 폼은 **사용자가 웹사이트에 데이터를 전송하는 것을 허용하는 기술**이다. HTML 폼은 하나 이상의 위젯으로 만들어지며 종류로는 텍스트 필드, 셀렉트 박스, 버튼, 체크박스, 라디오 등이 이에 해당한다.
+
+이러한 폼은 일반적으로 데이터 전송을 위해 사용되나 사용자 경험 UX의 관점에서 폼이 많을수록 사용자들의 만족도가 줄어든다는 것을 기억해야한다.
+
+### form tag
+
+```html
+<form action="/my-handling-form-page" method="post"></form>
+```
+
+- action : 데이터를 보낼 URL 지정
+- method : HTTP 요청 방식 설정
+
+### input, label, textArea
+
+```html
+<form action="/my-handling-form-page" method="post">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" />
+  </div>
+  <div>
+    <label for="mail">E-mail:</label>
+    <input type="email" id="mail" />
+  </div>
+  <div>
+    <label for="msg">Message:</label>
+    <textarea id="msg"></textarea>
+  </div>
+</form>
+```
+
+- label : 위젯과 라벨을 연결할 때 사용
+- input : 데이터를 받을 수 있는 창을 만드는 태그 ([input_option](https://developer.mozilla.org/ko/docs/Web/HTML/Element/Input))
+- textArea : text를 받기 위한 태그 ([text option](https://developer.mozilla.org/ko/docs/Web/HTML/Element/textarea))
+
+### button
+
+폼이 완성되었을 때 button 태그를 사용하여 데이터를 서버로 보낼 수 있따.
+
+```html
+<form action="/my-handling-form-page" method="post">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" />
+  </div>
+  <div>
+    <label for="mail">E-mail:</label>
+    <input type="email" id="mail" />
+  </div>
+  <div>
+    <label for="msg">Message:</label>
+    <textarea id="msg"></textarea>
+  </div>
+
+  <div class="button">
+    <button type="submit">Send your message</button>
+  </div>
+</form>
+```
+
+**button 종류**
+
+- submit : form 요소의 action 속성에 정의된 주소로 데이터 전송
+- reset : 모든 폼 위젯을 기본값으로 변경 ( mdn은 이를 추천하지 않는다. )
+- button : 기본값
+
+## 유효성 검사
+
+데이터를 서버에 전송하기 위해 form 태그 그리고 위젯(input, textarea)를 사용하여 데이터를 받는다. 하지만 이 받은 데이터를 바로 서버로 보낼 수 없다. 서버에 보내기 전에 이게 **서버가 원하는 데이터 인지 확인**을 해야한다. 이것이 유효성 검사라고 볼 수 있다.
+
+> 예
+> 회원가입 시 아이디, 비밀번호 등 형식이 맞는지
+> 비밀번호가 서버가 원하는 형식 특수문자, 영어, 대문자 등이 들어있는지
+
+### Input Validation
+
+- required : 필수 입력
+- minlength/Maxlength : 최소/최대 값을 설정한다.
+- min / max : type number 의 maximum / minimum 값을 설정한다.
+- type : button, checkbox, color, date, dateTime, email, file, moth, number, password, radio, range, reset, search, tel, week, url, time
+- pattern : 정규표헌식을 넣을 수 있다.
+- oninvalid : 유효성검사에서 벗어났을 때 문구를 보여준다.

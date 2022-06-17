@@ -1,0 +1,90 @@
+# CSS 배워보기
+
+> 해당 글은 [web.dev](https://web.dev/learn/css/box-model/)를 보고 작성한 글입니다.
+
+## Box 모델
+
+우리가 CSS로 표시하는 모든 것이 Box라는 것으로 이루어져있다.
+그게 우리 눈에 단순이 텍스트, 이미지로 보여도 그것은 사실 하나의 박스이다.
+
+### 콘텐츠 및 크기
+
+Box는 display 값, 설정된 치수 및 박스 안에 있는 컨텐츠에 따라 다른 크기를 갖는다. 이러한 **컨텐츠는 박스 크기에 영향을 미친다고 생각**하면 된다.
+
+!codesandbox[damp-star-lq560f?fontsize=14&hidenavigation=1&theme=dark]
+
+!codepen[byungmin12/embed/WNMmqgb?default-tab=html%2Cresult]
+
+위 두개의 상황을 본다면 컨텐츠가 Box의 크기에 영향을 미치고 이를 어떻게 통제할 수 있는지 알 수 있다.
+
+### Box 모델의 영역
+
+박스 모델이 어떠한 영역을 가지고 있는지 알아보자
+
+![](https://velog.velcdn.com/images/kbm940526/post/42d79d0d-02e9-474d-bcd2-b6073c12c186/image.png)
+
+#### 컨텐츠 영역
+
+컨텐츠 영역은 말 그대로 내용물이 넣어지는 부분이다. 이 부분의 부모 컨텐츠의 크기를 제어할 수도 있다.
+
+#### 패딩 영역
+
+컨텐츠를 둘러싸고 있는 영역이다. overflow: auto, scroll같은 규칙이 설정되어 있으면 스크롤바도 이 공간을 차지한다.
+
+!codepen[web-dot-dev/embed/BaReoEV?default-tab=html%2Cresult]
+
+위의 코드는 scroll영역을 확인할 수 있는 좋은 코드다.
+
+> vmin, vmax
+> 위 코드 css부분에서 나오는 단위이다. v는 View를 나타낸다.
+> viewport에서 최소와 최대를 나타냄 예를 들어 화면 가로 세로가 1900, 1000이면 vmin은 1000, vmaxsms 1900된다.
+
+#### 테두리 영역
+
+패딩을 둘러싸고 있는 공간으로 border값으로 채워진다.
+
+#### 마진(margin: 여백) 영역
+
+margin은 규칙에 의해 정의된 박스 주변의 공간이다. outline 및 box-shadow와 같은 속성이 이 공간을 차지하며 박스 크기에 영향은 미치지 않는다.
+
+!codepen[byungmin12/embed/gOvEVYN?default-tab=html%2Cresult]
+
+### Box 모델 제어
+
+Box를 제어하는 방법을 이해하기 전에 브라우저에서 어떠한 일이 발생하는지 알아보자.
+
+모든 브라우저는 HTML 문서에 기본적인 스타일 시트를 적용합니다. 기본값을 적용한다고 보면 됩니다.
+
+> ex
+> div -> display:box;
+> li -> display: list-item;
+> span: display: inline;
+
+이러한 기본값들도 일정 규칙을 가지고 있습니다.
+
+> 디폴트 규칙
+> inline -> 여백O , 다른 규칙 X , 컨텐츠 요소만큼의 space
+> inline-block -> 여백O , inline 과 동일, 컨텐츠 요소만큼의 space
+> block ->inline space O
+
+이러한 디폴트값이 Box에 미치는 영향에 대한 이해와 함께 Box 크기 계산 방법을 알려주는 **box-sizing**에 대해 알아보자.
+
+> 모든 Box에는 **box-sizing: content-box;**라는 규칙이 들어있습니다.
+
+**content-box**를 **box-sizing**의 값으로 갖는 것은 width 및 height와 같은 치수를 설정할 때 content box에 적용된다는 것을 의미합니다. 그 다음 padding 및 border를 설정하면 content box크기에 추가가 됩니다.
+
+예를 들어
+
+```css
+.my-box {
+  width: 200px;
+  border: 10px solid;
+  padding: 20px;
+}
+```
+
+이라는 css를 줬을 때 className **.my-box**의 box size는 260px이되는 것입니다.
+
+하지만 content-box속성을 **border-box**를 주면 이를 제어하는 것이 가능합니다.
+
+!codepen[web-dot-dev/embed/oNBvVpM?default-tab=html%2Cresult]

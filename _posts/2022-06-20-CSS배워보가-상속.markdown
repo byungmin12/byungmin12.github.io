@@ -1,0 +1,121 @@
+# Inheritance - 상속
+
+상속을 알기 전에 아래 코드를 먼저 보겠습니다.
+
+```html
+<a href="http://example.com" class="my-button">I am a button link</a>
+```
+
+```css
+.my-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  background: pink;
+  font: inherit;
+  text-align: center;
+}
+```
+
+자 위와 같이 `html`과 `css`에 코드를 작성했다면 `I am a button link`의 text color는 무슨택일까요 ??
+
+!codepen[byungmin12/embed/MWQRrzr?default-tab=html%2Cresult]
+
+자 결과를 확인해봅시다.
+아이러니 하게도 `I am a button link`의 색상은 **파란색**입니다.
+
+왜 그런것일까요 ?
+
+이게 바로 `Inheritance` 상속입니다.
+
+CSS에 기본적으로 적용되어 있는 `a tag`의 규칙을 상속받은 것입니다.
+
+!codepen[byungmin12/embed/MWQRrzr?default-tab=html%2Cresult]
+
+밑에 `You are a button link`의 경우 텍스트 컬러가 바뀌었습니다. 이는 상속받은 규칙에 새로운 규칙을 덮었기 떄문입니다.
+
+## Inheritance flow
+
+상속이 어떻게 작동하는지 확인해 보도록 하겠습니다.
+
+!codepen[web-dot-dev/embed/JjEKgmK?default-tab=html%2Cresult]
+
+> 위 codepen editor는 html태그와 body 태그가 존재합니다.
+
+위 코드를 보자
+
+html 태그에 color를 , body 태그에 글자 크기를 지정해주었다.
+그리고 div태그는 아무렇 style을 주지 않았으며 p태그는 font-style과 font-weight를 지정해주었다.
+
+상속은 상위 요소에서 하위 요소로 전달되기에 p태그와 div태그는 html,body태그의 css도 적용됩니다.
+
+> 상속이 되지 않는 속성
+> 모든 CSS 속성이 상속이 이루어지는 것은 아닙니다. 아래에 존재하는 속성들만 상속이 이루어집니다.
+
+- azimuth
+- border-collapse
+- border-spacing
+- caption-side
+- color
+- cursor
+- direction
+- empty-cells
+- font-family
+- font-size
+- font-style
+- font-variant
+- font-weight
+- font
+- letter-spacing
+- line-height
+- list-style-image
+- list-style-position
+- list-style-type
+- list-style
+- orphans
+- quotes
+- text-align
+- text-indent
+- text-transform
+- visibility
+- white-space
+- windows
+- word-spacing
+  [링크](https://web.dev/learn/css/inheritance/#which-properties-are-inheritable)
+
+## 상속 방법 및 제어
+
+### `inherit` keyword
+
+`interit` 를 통해 상속을 하며 이를 잘 사용하기 위해서는 예외처리를 잘 하는 것이다.
+
+!codepen[byungmin12/embed/KKQYjeP?default-tab=html%2Cresult]
+
+위 에디터의 결과와 CSS를 보자
+
+1. strong 태그에 `color:red`와 `font-weight: 900`을 정했다.
+2. 그리고 `class name : .my-component`에 `font-weight: 500`를 정했다.
+3. 마지막으로 `.my-component strong ` 에 `font-weight: inherit; color:blue;` 속성을 지정하였다.
+
+class name이 다른 strong 태그는 1번 규칙만 적용
+strong 태그가 없는 `class name : .my-component`는 2번 규칙만 적용
+`class name : .my-component`안 strong 태그는 3번 규칙이 적용
+
+이렇게 예외 처리를 통해 원하는 태그만 상속받게 할 수 있다.
+
+### `initial` keyword
+
+우리는 모든 태그들이 CSS 기본값을 가지고 있다는 것을 알고있다. 이를 `initial`태그를 활용하여 알수없는 CSS 규칙이 적용되었을 때 기본값으로 **리셋**할 수 있다
+
+!codepen[web-dot-dev/embed/OJWVORZ?default-tab=html%2Cresult]
+
+### `unset` keyword
+
+CSS에 존재하는 `unset`키워드는 어떻게 작동하는지 알아보자
+!codepen[web-dot-dev/embed/bGgdLNB?default-tab=html%2Cresult]
+속성이 **상속 가능**할 경우 `unset`키워드는 `inherit`상속과 동일하게 작동합니다.
+속성이 **상속할 수 없**을 경우 `unset`키워드는`initial`초기와 동일하게 작동합니다.
+
+위와 같이 사용도 가능하지만 all과 같이 사용하면 더 좋습니다
+
+!codepen[web-dot-dev/embed/XWpbZbB?default-tab=html%2Cresult]

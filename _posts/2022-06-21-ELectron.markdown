@@ -1,0 +1,187 @@
+# Electron
+
+Electron은 Javascript, HTML, 및 CSS를 사용하여 플랫폼 간 데스크탑 앱을 빌드해주는 프레임워크이다. 이러한 Electron은 크롬과 Node.js를 사용하여 빌드한다. 또한 Mac, Windows, Linux까지 호환한다.
+
+위의 말처럼 우리는 Javascript, HTML, CSS만 안다면 웹페이지뿐만아니라 데스크탑 애플리케이션도 개발이 가능하다는 뜻이다.
+
+그리거 Electron 공식문에서도
+
+> It's easier than you think
+> 생각한것 보다 쉽다.
+
+사전 지식으로 웹과 Node.js만 안다면 Electron을 통해 데스트탑 애플리케이션 빌드를 쉽게 할 수 있다고 나와있다.
+
+## 추세
+
+Electron은 계속해서 릴리스 중이며
+
+**stateofjs** MOBILE & DESKTOP RANING에서
+
+> Satisfacction
+> ![](https://velog.velcdn.com/images/kbm940526/post/91cb8c55-47b9-458f-9654-8e91bfd3a17b/image.png)
+> Usage
+> ![](https://velog.velcdn.com/images/kbm940526/post/a6e79770-2907-4413-adc2-66dd2810254a/image.png)
+
+만족도와 사용부분에서 높은 순위를 기록하고 있습니다.
+
+## Desktop application
+
+[여기](https://www.electronjs.org/apps)에서 자세히 확인할 수 있겠지만 Electron을 사용하여 만든 데스크탑 애플리케이션들은 존재합니다.
+
+- Teams
+- Zoom
+- Signal
+- StreamLabs
+- Slack for Desktop
+- WordPress for Desktop
+- Skype
+- Pexels Desktop
+- Discord
+- WhatsApp Desktop
+
+## 장단점
+
+### 장점
+
+- 방대한 커뮤니티, 많은 정보
+  위에서 우리는 Electron의 만족도와, 사용량에 대한 순위를 보았습니다. 이는 많은 사람들이 ELectron을 사용하고 있다는 것을 나타내며 많은 사람들이 사용하다보면 이에 대한 정보가 빠르고 자세하게 공유됩니다.
+
+- 대기업에서도 사용
+  위에서 본 것과 같이 많은 기업들이 이미 Electron으로 Desktop용 애플리케이션을 만들었습니다.
+
+- 낮은 러닝 커프
+  Electron의 말대로 우린 간편한 설정으로 우리가 만든 web을 데스크탑 애플리케이션으로 바꿀수있습니다.
+
+- 웹 기술 사용 및 Js 기능 사용
+  Electron은 Node.js를 사용하고 HTML,CSS,JS를 사용하기에 이와 관련된 기능, 기술을 사용 가능합니다
+
+### 단점
+
+- 큰 사이즈
+  Electron 빌드를 하다보면 느낀점은 빌드 파일 사이즈가 크다는 것입니다. Ml-lv(회사 사업)기준 1.3gb정도 사용합니다.
+
+- 그렇기에 앱 자체도 무겁습니다.
+
+- 모바일 지원
+  Desktop은 지원하지만 모바일 용은 따로 지원하지 않습니다.
+
+- 보안에 취약합니다.
+  사용자가 앱 소스코드를 디컴파일해서 볼 수 있습니다.
+
+## 빌드
+
+### main.js
+
+ELectron을 통해 만든 Desktop application 설정을 해주는 곳입니다.
+
+```js
+function createWindow() {
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {},
+  });
+
+  win.loadURL(
+    isDev
+      ? "http://localhost:3001"
+      : `file://${path.join(__dirname, "../build/index.html")}`
+  );
+
+  remote.enable(win.webContents);
+}
+
+app.on("ready", () => {
+  createWindow();
+});
+
+app.on("window-all-closed", function () {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+});
+
+app.on("activate", function () {
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
+```
+
+간략히 코드를 보면 이런 느낌입니다.
+
+`createWindow`를 통해 애플리케이션 설정을 해줍니다.
+`"ready"`을 통해 Electron이 초기화를 완료했을 때 `createWindow`실행합니다.
+`activate`를 통해 아무것도 열려 있지 않을 때 찾을 실행합니다.
+`window-all-closed`를 통해 창을 닫습니다.
+
+### package.json
+
+Electoron을 통해 build를 하기 위해선 package.json에 몇가지 설정을 해줘야합니다.
+
+```package.json
+{
+  "name": "test",
+  "version": "0.1.1",
+  "private": true,
+  "main": "public/main.js",
+  "homepage": "./",
+  "dependencies": {
+    "@electron/remote": "^2.0.8",
+    "electron-is-dev": "^2.0.0",
+    "electron-log": "^4.4.7",
+    "electron-updater": "^5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron:serve": "concurrently -k \"cross-env BROWSER=none sudo yarn start\" \"sudo yarn electron:start\"",
+    "electron:build": "sudo yarn build && electron-builder -c.extraMetadata.main=build/main.js",
+    "electron:start": "wait-on tcp:3000 && electron ."
+  },
+...
+  "build": {
+    "extends": null,
+    "appId": "com.example.electron-cra",
+    "files": [
+      "dist/**/*",
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "publish": {
+      "provider": "github",
+      "private": true,
+      "owner": "",
+      "repo": "ml-lv",
+    },
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.1",
+    "cross-env": "^7.0.3",
+    "electron": "^19.0.3",
+    "electron-builder": "^23.0.3",
+    "typescript": "^4.6.4",
+    "wait-on": "^6.0.1"
+  }
+}
+```
+
+- version : 빌드된 파일의 버전을 지정해줍니다. 나중에 깃헙릴리스와 연결할 때 버전을 정리해줍니다.
+- main : main.js의 위치를 정해줍니다.
+- 설치
+  electron-is-dev : Electron이 develop or product 인지 확인합니다.
+  concurrently : 여러 명령어를 병렬적으로 실행하게 도와줌
+  wait-on : 특정 포트, 파일, HTTP 자원 등이 활성화될 때까지 기다려주는 크로스 플랫폼
+  cross-env : 환경에 관계 없는 env 설정을 도와줌
+
+- scripts : Electron 빌드 및 실행에 맞는 세팅
+- build : build를 통해 앱파일명 , 업데이트 자동화 등을 설정할 수 있다.
+
+## 사용해보자
+
+Electron은 기존에 만들어진 web을 Desktop application으로 바꿀 수도 있지만, 새롭게 Electron용으로 만들거나 Electron에서 제공하는 fiddle을 사용하여 경험해볼 수 있다. 자세한 설정 등은 [Docs](https://www.electronjs.org/docs/latest/)를 보고 실험해보자

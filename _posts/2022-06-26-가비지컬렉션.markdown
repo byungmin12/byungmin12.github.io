@@ -1,0 +1,118 @@
+# 가비지 컬렉션
+
+![](https://velog.velcdn.com/images/kbm940526/post/ef0017ac-2132-478f-9cca-f8d7a90be1f0/image.gif)
+가비지 컬렉션은 메모리 관리 기법 중 하나로, 프로그램이 동적으로 할당했던 메모리 영역 중에서 필요없게 된 영역을 해제하는 기능이다.
+
+## 가비지 컬렉션 기준
+
+자바스크립트는 도달 가능성이라는 개념을 사용해 메모리 관리를 수행합니다.
+여기서 `도달 가능성`이란 쉽게 말해 어떻게든 접근하거나 사용할 수 있는 값을 의미합니다. 이런 도달 가능성이 있는 값은 **가비지 컬렉션에서 제외**됩니다.
+
+도달 가능한 값
+
+- 현재 함수의 지역 변수와 매개변수
+- 함수에서 사용되는 변수와 매개변수
+- 전역 변수
+- 등등
+
+위의 값들이 참조하는 값이나 체이닝으로 참조할 수 있는 값은 도달 가능한 값이 됩니다.
+
+## 예
+
+### 참조가 하나
+
+```js
+let user = {
+  name: "kim",
+};
+```
+
+이라는 객체 변수를 선언했을 때
+![](https://velog.velcdn.com/images/kbm940526/post/dc79389a-8a3f-4f45-8bb2-d1645aa0027c/image.png)
+이러한 체이닝이 걸립니다.
+
+이 때 **user에 null을 할당**하게 되면
+
+![](https://velog.velcdn.com/images/kbm940526/post/6621d2c7-b158-4737-af7f-8c07a7e0772f/image.png)
+user는 null이 할당되고 "kim"은 **도달할 수 없는 상대**가 되어 가바지 컬렉션으로 분류되고 데이터는 메모리에서 삭제됩니다.
+
+### 참조 두개
+
+참조가 두개 이루어진다면 어떻게 작동하는지 확인해보겠습니다.
+
+```js
+let user = {
+  name: "kim",
+};
+let son = user;
+```
+
+![](https://velog.velcdn.com/images/kbm940526/post/26d512c5-e08c-4173-a755-6940e702f641/image.png)
+
+이러한 할당은 다음과 같은 참조를 만듭니다. 그리고 **user에 null을 할당**하게 된다면
+
+```js
+console.log(user); // user is null
+console.log(son); // son has name: "kim"
+```
+
+이라는 값을 가지고 있기에 `name:"kim"`은 가비지 컬렉션으로 분류되지 않습니다.
+
+### 연결된 객체
+
+```js
+function marry(man, woman) {
+  woman.husband = man;
+  man.wife = woman;
+
+  return {
+    father: man,
+    mother: woman,
+  };
+}
+
+let family = marry(
+  {
+    name: "John",
+  },
+  {
+    name: "Ann",
+  }
+);
+
+delete family.father;
+delete family.mother.husband;
+```
+
+![](https://velog.velcdn.com/images/kbm940526/post/43e39fcc-35e3-4f22-bc3e-d2f4986a2185/image.png)
+
+이와 같은 처리를 하면 `name:""john`은 더이상 참조하는 곳이 없기에 가비지 컬렉션으로 분류가되고 메모리에서 삭제됩니다.
+
+그럼 `name:"Ann"`은 어떻게 될까요 ??
+
+![](https://velog.velcdn.com/images/kbm940526/post/3a7d1189-3fd3-497d-aede-10d744a76a92/image.png)
+
+보시는 바와같이 `name:"Ann"`은 살아있습니다.!
+
+### 도달할 수 없는 섬
+
+위 코드에서 `famail = null`을 할당하면 어떻게 바뀔까요 ?
+![](https://velog.velcdn.com/images/kbm940526/post/86443ccc-8cf7-4ae4-b2f9-29219a011a2e/image.png)
+
+`family` 자체가 도달할 수 없는 섬으로 분류되기에 `name:"Ann"`,`name:""john` 또한 가비지 컬렉션으로 분류되어 삭제됩니다.
+
+## mark-and-sweep
+
+이는 가비지 컬렉션이 `mark-and-sweep`이라는 알고리즘을 바탕으로 하기에 가능합니다.
+
+- 가비지 컬렉션은 루트(최상단 위에서는 global)정보를 수집하고 기억(mark)합니다.
+- 루트보다 참조하는 모든 객체,데이터를 방문하고 기억(mark)합니다.
+- 이러한 것을 계속하여 반복합니다. 단, 기억(mark)하고 있는 곳은 재방문하지 않습니다.
+- 이후 mark되지 않는 객체, 데이터를 삭제(sweep)합니다.
+
+![](https://miro.medium.com/max/1400/1*WVtok3BV0NgU95mpxk9CNg.gif)
+
+## 한계
+
+자바스크립트의 가비지컬렉션에는 아직까지 한계가 존재합니다.
+바로 **수동으로 메모리 해제**가 **불가능하다**는 것입니다.
